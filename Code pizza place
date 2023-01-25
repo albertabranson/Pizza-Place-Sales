@@ -18,9 +18,24 @@ SELECT round(avg(count_pizzas)), order_id FROM (SELECT count(order_details_id) A
 FROM order_details 
 group by order_id) t;
 
-#4.Do we have any bestsellers?
+#4.Searching for bestsellers. The pizza that is ordered the most is The Classic Deluxe Pizza.
+SELECT count(order_details_id), order_details.pizza_id, pizza_types.pizza_type_id, pizza_types.name from order_details
+JOIN pizzas on order_details.pizza_id = pizzas.pizza_id
+JOIN pizza_types on pizzas.pizza_type_id = pizza_types.pizza_type_id
+GROUP BY pizza_types.pizza_type_id
+ORDER BY count(order_details_id) desc;
 
+#5.Searching for to total revenue of 2015. U$ 817,860.05
+SELECT  sum(order_details.quantity*pizzas.price) from order_details
+JOIN pizzas on order_details.pizza_id = pizzas.pizza_id;
 
-How much money did we make this year? Can we indentify any seasonality in the sales?
+#6. Can we indentify any seasonality in the sales?
+Searching for total amount in sales per day.
+SELECT  sum(order_details.quantity*pizzas.price) AS sales, `date` from order_details
+JOIN pizzas on order_details.pizza_id = pizzas.pizza_id
+JOIN orders on order_details.order_id = orders.order_id
+GROUP BY `date`
+ORDER BY sales;
+
 
 Are there any pizzas we should take of the menu, or any promotions we could leverage?
