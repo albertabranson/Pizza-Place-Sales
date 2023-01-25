@@ -1,0 +1,26 @@
+Analysis of Maven Analytics dataset: https://www.mavenanalytics.io/data-playground?search=pizza%20place
+
+#1.
+Searching how many customers do we have each day.  Average of 60 customers per day.
+SELECT round(avg(count_per_day)) FROM (SELECT count(order_id) AS count_per_day,`date`
+FROM orders
+group by `date`) t;
+
+#2.
+Searching if there are there any peak hours.  Top 5 peak hours: From 12:00 to 13:59, from 18:00 to 19:59. 
+SELECT count(order_id), hours(`time`) AS peak FROM orders 
+group by peak
+order by count(order_id) DESC limit 5;
+
+#3.
+Searching of how many pizzas are typically in an order. Average of 2 pizzas per order.
+SELECT round(avg(count_pizzas)), order_id FROM (SELECT count(order_details_id) AS count_pizzas, order_id 
+FROM order_details 
+group by order_id) t;
+
+#4.Do we have any bestsellers?
+
+
+How much money did we make this year? Can we indentify any seasonality in the sales?
+
+Are there any pizzas we should take of the menu, or any promotions we could leverage?
