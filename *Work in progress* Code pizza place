@@ -31,11 +31,11 @@ JOIN pizzas on order_details.pizza_id = pizzas.pizza_id;
 
 #6. Can we indentify any seasonality in the sales?
 Searching for total amount in sales per day.
-SELECT  sum(order_details.quantity*pizzas.price) AS sales, `date` from order_details
+SELECT  sum(order_details.quantity*pizzas.price) AS sales, DATE_PART('month', `date`) AS month, DATE_PART('day', `date`) AS day from order_details
 JOIN pizzas on order_details.pizza_id = pizzas.pizza_id
 JOIN orders on order_details.order_id = orders.order_id
 GROUP BY `date`
-ORDER BY sales;
+ORDER BY sales desc;
 
 
 Are there any pizzas we should take of the menu, or any promotions we could leverage?
