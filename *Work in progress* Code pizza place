@@ -25,17 +25,37 @@ JOIN pizza_types on pizzas.pizza_type_id = pizza_types.pizza_type_id
 GROUP BY pizza_types.pizza_type_id
 ORDER BY count(order_details_id) desc;
 
-#5.Searching for to total revenue of 2015. U$ 817,860.05
+#5.Searching for the least sold pizza type: The Brie Carre Pizza, ordered only 480 units in 2015 against the bestseller that sold 5 times more.
+SELECT count(order_details_id), order_details.pizza_id, pizza_types.pizza_type_id, pizza_types.name from order_details
+JOIN pizzas on order_details.pizza_id = pizzas.pizza_id
+JOIN pizza_types on pizzas.pizza_type_id = pizza_types.pizza_type_id
+GROUP BY pizza_types.pizza_type_id
+ORDER BY count(order_details_id) asc;
+
+#6.Searching for to total revenue of 2015. U$ 817,860.05
 SELECT  sum(order_details.quantity*pizzas.price) from order_details
 JOIN pizzas on order_details.pizza_id = pizzas.pizza_id;
 
-#6. Can we indentify any seasonality in the sales?
-Searching for total amount in sales per day.
+#7. Can we indentify any seasonality in the sales? Analyzed in Tableau for better visibility, Friday is the weekday with the bigger number of sales. November, May and March were the top 3 months on sales.
+--Searching for total amount in sales per day.
 SELECT  sum(order_details.quantity*pizzas.price) AS sales, DATE_PART('month', `date`) AS month, DATE_PART('day', `date`) AS day from order_details
 JOIN pizzas on order_details.pizza_id = pizzas.pizza_id
 JOIN orders on order_details.order_id = orders.order_id
 GROUP BY `date`
 ORDER BY sales desc;
+--Searching for total amount in sales per month. November, May and March were the top 3 months on sales.
+SELECT  sum(order_details.quantity*pizzas.price) AS sales, DATE_PART('month', `date`) AS month from order_details
+JOIN pizzas on order_details.pizza_id = pizzas.pizza_id
+JOIN orders on order_details.order_id = orders.order_id
+GROUP BY `month`
+ORDER BY sales desc;
+
+#8.
+--Code to analyze seasonality per weekday/hour on Tableau (had to convert date and time to timestamp so Tableau would accept as datetime):
+SELECT  sum(order_details.quantity*pizzas.price) AS sales, DATE_PART('month', `date`) AS month, DATE_PART('day', `date`) AS day , concat(`date`, ' ', `time`) as date_time from order_details
+JOIN pizzas on order_details.pizza_id = pizzas.pizza_id
+JOIN orders on order_details.order_id = orders.order_id
+GROUP BY `date_time`
+ORDER BY sales desc;
 
 
-Are there any pizzas we should take of the menu, or any promotions we could leverage?
