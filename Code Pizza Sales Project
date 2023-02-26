@@ -58,4 +58,4 @@ JOIN orders on order_details.order_id = orders.order_id
 GROUP BY `date_time`
 ORDER BY sales desc;
 
-
+https://www.mavenanalytics.io/project/3048
